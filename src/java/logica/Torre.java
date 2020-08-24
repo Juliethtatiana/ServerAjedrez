@@ -1,38 +1,51 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package logica;
 
 import java.awt.Point;
 import java.util.ArrayList;
 
-/**
- *
- * @author Tatiana
- */
-public class Torre extends Ficha{
+public class Torre extends Ficha {
 
-    public Torre(String color) {
-        super(color,'T');
-    }
-
-
+    private int nombre=5;
+    private boolean primerMov = false;
 
     @Override
-    public ArrayList<Point> posiblesMovimientos(Tablero tablero) {
-        pm.clear();
-        /*
-        COMO LOS ALFILES VAN EN TODAS LAS DIRECCIONES NO ES NECESARIO CAMBIAR LOS MÃ‰TODOS SEGUN SU COLOR
-       
-        if (primerMov==false){
-            
-        }
-        
-        
-         */ 
-        
+    public int getNombre(){
+        return nombre;
+    }
+    
+     // función para ponerle a la torre falso desde afuera
+    public void setMov(boolean mov){
+        primerMov=mov;
+    }
+    
+    public Torre(Point p, String color){   
+        this.posicion=p;
+        this.color=color;
+        posiblesMov = new ArrayList();
+    }
+    
+   
+   /*
+    COMO ESTARÍA EL TABLERO EN LA MATRIZ
+    Y   7|PN|PN|PN|PN|PN|PN|PN|PN|
+        6|TN|CN|AN|RN|RN|AN|CN|TN|
+        5|  |  |  |  |  |  |  |  |
+        4|  |  |  |  |  |  |  |  |
+        3|  |  |  |  |  |  |  |  |
+        2|  |  |  |  |  |  |  |  |
+        1|PB|PB|PB|PB|PB|PB|PB|PB|
+        0|TB|CB|AB|RB|RB|AB|CB|TB|
+            0  1  2  3  4  5  6  7
+                                X
+    */
+
+      // SACA TODOS LOS POSIBLES MOVIMIENTOS INCLUSO LOS DE ATAQUE
+      
+    @Override
+    public void movimiento (Tablero tablero) {
+            limpiarMovimientos();
+
+    
           // SE SUPONE QUE LAS BLANCAS VAN DE ABAJO HACIA ARRIBA
             // verifica si hay un aliado en la casilla siguiente
             // si esta no puede moverse alli
@@ -40,16 +53,16 @@ public class Torre extends Ficha{
             
             //---------------------SE DIRIGE hacia  LA DERECHA
             for(int i =1 ; i<8;i++){
-                if(coordenada.x+i<=7){
-                   // no hay ninguna ficha aliada en la posiciÃ³n  (devuelve true si hay alguna ficha ahÃ­)                     
-                    if(!tablero.preguntarAliado(new Point(coordenada.x+i,coordenada.y),color)){
-                        //si no hay ninguna fihca enemiga en la posiciÃ³n
-                        if(!tablero.preguntar(new Point(coordenada.x+i,coordenada.y),color )){
-                                pm.add(new Point(coordenada.x+i,coordenada.y));
+                if(posicion.x+i<=7){
+                   // no hay ninguna ficha aliada en la posición  (devuelve true si hay alguna ficha ahí)                     
+                    if(!tablero.preguntarAliado(new Point(posicion.x+i,posicion.y),this.color)){
+                        //si no hay ninguna fihca enemiga en la posición
+                        if(!tablero.preguntar(new Point(posicion.x+i,posicion.y),this.color )){
+                                posiblesMov.add(new Point(posicion.x+i,posicion.y));
                         }else{
-                            // hay un enemigo ahÃ­, se aÃ±ade la posiciÃ³n y termina el bucle.
-                                pm.add(new Point(coordenada.x+i,coordenada.y));
-                           
+                            // hay un enemigo ahí, se añade la posición y termina el bucle.
+                                posiblesMov.add(new Point(posicion.x+i,posicion.y));
+                                break;
                         }
                     }else{
                         break;
@@ -64,15 +77,16 @@ public class Torre extends Ficha{
              
             //se dirige hacia la izquierda
             for(int i =1 ; i<8;i++){
-                if(coordenada.x-i>=0){
-                   // no hay ninguna ficha aliada en la posiciÃ³n  (devuelve true si hay alguna ficha ahÃ­)                     
-                    if(!tablero.preguntarAliado(new Point(coordenada.x-i,coordenada.y),color)){
-                        //si no hay ninguna fihca enemiga en la posiciÃ³n
-                        if(!tablero.preguntar(new Point(coordenada.x-i,coordenada.y),color )){
-                                pm.add(new Point(coordenada.x-i,coordenada.y));
+                if(posicion.x-i>=0){
+                   // no hay ninguna ficha aliada en la posición  (devuelve true si hay alguna ficha ahí)                     
+                    if(!tablero.preguntarAliado(new Point(posicion.x-i,posicion.y),this.color)){
+                        //si no hay ninguna fihca enemiga en la posición
+                        if(!tablero.preguntar(new Point(posicion.x-i,posicion.y),color )){
+                                posiblesMov.add(new Point(posicion.x-i,posicion.y));
                         }else{
-                            // hay un enemigo ahÃ­, se aÃ±ade la posiciÃ³n y termina el bucle.
-                                pm.add(new Point(coordenada.x-i,coordenada.y));       
+                            // hay un enemigo ahí, se añade la posición y termina el bucle.
+                                posiblesMov.add(new Point(posicion.x-i,posicion.y));
+                                break;
                         }
                     }else{
                         break;
@@ -85,16 +99,16 @@ public class Torre extends Ficha{
         //---------------------SE DIRIGE hacia abajo
             //se le RESTA a Y
             for(int i =1 ; i<8;i++){
-                if(coordenada.y-i>=0){
-                   // no hay ninguna ficha aliada en la posiciÃ³n  (devuelve true si hay alguna ficha ahÃ­)                     
-                    if(!tablero.preguntarAliado(new Point(coordenada.x,coordenada.y-i),color)){
-                        //si no hay ninguna fihca enemiga en la posiciÃ³n
-                        if(!tablero.preguntar(new Point(coordenada.x,coordenada.y-i),color )){
-                                pm.add(new Point(coordenada.x,coordenada.y-i));
+                if(posicion.y-i>=0){
+                   // no hay ninguna ficha aliada en la posición  (devuelve true si hay alguna ficha ahí)                     
+                    if(!tablero.preguntarAliado(new Point(posicion.x,posicion.y-i),color)){
+                        //si no hay ninguna fihca enemiga en la posición
+                        if(!tablero.preguntar(new Point(posicion.x,posicion.y-i),color )){
+                                posiblesMov.add(new Point(posicion.x,posicion.y-i));
                         }else{
-                            // hay un enemigo ahÃ­, se aÃ±ade la posiciÃ³n y termina el bucle.
-                                pm.add(new Point(coordenada.x,coordenada.y-i));
-                               
+                            // hay un enemigo ahí, se añade la posición y termina el bucle.
+                                posiblesMov.add(new Point(posicion.x,posicion.y-i));
+                                break;
                         }
                     }else{
                         break;
@@ -108,17 +122,17 @@ public class Torre extends Ficha{
             //se le RESTA a Y y SUMA a X
 
             for(int i =1 ; i<8;i++){
-               // se mueve EN LA DIRECCIÃ“N DE +Y
-               if(coordenada.y+i<=7){
-                // no hay ninguna ficha aliada en la posiciÃ³n  (devuelve true si hay alguna ficha ahÃ­)                     
-                if(!tablero.preguntarAliado(new Point(coordenada.x,coordenada.y+i),color)){
-                    //si no hay ninguna fihca enemiga en la posiciÃ³n
-                    if(!tablero.preguntar(new Point(coordenada.x,coordenada.y+i),color )){
-                            pm.add(new Point(coordenada.x,coordenada.y+i));
+               // se mueve EN LA DIRECCIÓN DE +Y
+               if(posicion.y+i<=7){
+                // no hay ninguna ficha aliada en la posición  (devuelve true si hay alguna ficha ahí)                     
+                if(!tablero.preguntarAliado(new Point(posicion.x,posicion.y+i),color)){
+                    //si no hay ninguna fihca enemiga en la posición
+                    if(!tablero.preguntar(new Point(posicion.x,posicion.y+i),color )){
+                            posiblesMov.add(new Point(posicion.x,posicion.y+i));
                     }else{
-                        // hay un enemigo ahÃ­, se aÃ±ade la posiciÃ³n y termina el bucle.
-                            pm.add(new Point(coordenada.x,coordenada.y+i));
-                            
+                        // hay un enemigo ahí, se añade la posición y termina el bucle.
+                            posiblesMov.add(new Point(posicion.x,posicion.y+i));
+                            break;
                     }
                     }else{
                         break;
@@ -126,24 +140,11 @@ public class Torre extends Ficha{
                 }else{
                     break;
                 }
-               
             }  
-        return pm;
     }
 
-    @Override
-    public void EjecutaranimacionMatar(String file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public void EjecutaranimacionMover(String file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public void setPrimerMov() {
-      
-    }
-    
 }
+  
+

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logica.Partida;
 
 /**
  *
@@ -35,7 +36,7 @@ public class ServletAjedrez extends HttpServlet {
         response.setContentType("application/:json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-           String comando = request.getParameter("comando");
+           String comando = request.getParameter("player1");
             out.println("{");
             out.println("\"comando\":\""+comando+"\"");
             out.println("}");
@@ -69,6 +70,12 @@ public class ServletAjedrez extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String player1 = request.getParameter("player1");
+         String player2 = request.getParameter("player2");
+         
+        
+         Partida mipartida = new Partida(); 
+        mipartida.empezar(player1, player2);
         processRequest(request, response);
     }
 

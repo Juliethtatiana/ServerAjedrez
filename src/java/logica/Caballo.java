@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package logica;
 
 import java.awt.Point;
@@ -11,82 +7,77 @@ import java.util.ArrayList;
 
 public class Caballo extends Ficha {
     
-    public Caballo(String color) {
-        super(color,'C');
-    }
+    private int nombre=4;
 
+    @Override
+    public int getNombre(){
+        return nombre;
+    }
     
-    public ArrayList<Point> posiblesMovimientos(Tablero tablero) {
-        pm.clear();
-        if(coordenada.y-2>=0){
-            if(coordenada.x+1<=7){
-                if(!tablero.preguntarAliado(new Point(coordenada.x + 1, coordenada.y - 2), this.color)){
-                    pm.add(new Point(coordenada.x + 1, coordenada.y-2));
+    public Caballo(Point p, String color){
+        this.posicion=p;
+        this.color=color;
+        posiblesMov = new ArrayList();
+    }
+    
+    @Override
+    public void movimiento(Tablero tablero) {
+        limpiarMovimientos();
+
+        if(posicion.y-2>=0){
+            if(posicion.x+1<=7){
+                if(!tablero.preguntarAliado(new Point(posicion.x + 1, posicion.y - 2), this.color)){
+                    posiblesMov.add(new Point(posicion.x + 1, posicion.y-2));
                 }
             }
-            if(coordenada.x-1>=0){
-                if(!tablero.preguntarAliado(new Point(coordenada.x - 1, coordenada.y - 2), this.color)){
-                    pm.add(new Point(coordenada.x - 1, coordenada.y-2));
+            if(posicion.x-1>=0){
+                if(!tablero.preguntarAliado(new Point(posicion.x - 1, posicion.y - 2), this.color)){
+                    posiblesMov.add(new Point(posicion.x - 1, posicion.y-2));
                 }
             }
                        
         }
         
-        if(coordenada.y+2<=7){
-            if(coordenada.x+1<=7){
-                if(!tablero.preguntarAliado(new Point(coordenada.x + 1, coordenada.y + 2), this.color)){
-                    pm.add(new Point(coordenada.x + 1, coordenada.y+2));
+        if(posicion.y+2<=7){
+            if(posicion.x+1<=7){
+                if(!tablero.preguntarAliado(new Point(posicion.x + 1, posicion.y + 2), this.color)){
+                    posiblesMov.add(new Point(posicion.x + 1, posicion.y+2));
                 }
             }
-            if(coordenada.x-1>=0){
-                if(!tablero.preguntarAliado(new Point(coordenada.x - 1, coordenada.y + 2), this.color)){
-                    pm.add(new Point(coordenada.x - 1, coordenada.y+2));
+            if(posicion.x-1>=0){
+                if(!tablero.preguntarAliado(new Point(posicion.x - 1, posicion.y + 2), this.color)){
+                    posiblesMov.add(new Point(posicion.x - 1, posicion.y+2));
                 }
             }
                        
         } 
        
-        if(coordenada.x+2<=7){
-            if(coordenada.y+1<=7){
-                if(!tablero.preguntarAliado(new Point(coordenada.x + 2, coordenada.y + 1), this.color)){
-                    pm.add(new Point(coordenada.x + 2, coordenada.y+1));
+        if(posicion.x+2<=7){
+            if(posicion.y+1<=7){
+                if(!tablero.preguntarAliado(new Point(posicion.x + 2, posicion.y + 1), this.color)){
+                    posiblesMov.add(new Point(posicion.x + 2, posicion.y+1));
                 }
             }
-            if(coordenada.y-1>=0){
-                if(!tablero.preguntarAliado(new Point(coordenada.x + 2, coordenada.y - 1), this.color)){
-                    pm.add(new Point(coordenada.x + 2, coordenada.y - 1));
+            if(posicion.y-1>=0){
+                if(!tablero.preguntarAliado(new Point(posicion.x + 2, posicion.y - 1), this.color)){
+                    posiblesMov.add(new Point(posicion.x + 2, posicion.y - 1));
                 }
 
             }           
         }
         
-         if(coordenada.x-2>=0){
-            if(coordenada.y+1<=7){
-                if(!tablero.preguntarAliado(new Point(coordenada.x - 2, coordenada.y + 1), this.color)){
-                    pm.add(new Point(coordenada.x - 2, coordenada.y + 1));
+         if(posicion.x-2>=0){
+            if(posicion.y+1<=7){
+                if(!tablero.preguntarAliado(new Point(posicion.x - 2, posicion.y + 1), this.color)){
+                    posiblesMov.add(new Point(posicion.x - 2, posicion.y + 1));
                 }
             }
-            if(coordenada.y-1>=0){
-                if(!tablero.preguntarAliado(new Point(coordenada.x - 2, coordenada.y - 1), this.color)){
-                    pm.add(new Point(coordenada.x - 2, coordenada.y - 1));
+            if(posicion.y-1>=0){
+                if(!tablero.preguntarAliado(new Point(posicion.x - 2, posicion.y - 1), this.color)){
+                    posiblesMov.add(new Point(posicion.x - 2, posicion.y - 1));
                 }
             }
         }
-        return pm;
-    }
-
-    @Override
-    public void EjecutaranimacionMatar(String file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void EjecutaranimacionMover(String file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setPrimerMov() {
         
     }
 }
