@@ -11,12 +11,16 @@ public class Partida {
     private Jugador[] jugadores;
     private Tablero tablero;
     private int numbJugadas; 
-    
+    private static Partida instancia;
     
     public Partida(){
         jugadores = new Jugador[2];
         tablero = new Tablero();      
         numbJugadas=1;
+    }
+
+    public Tablero getTablero() {
+        return tablero;
     }
     
       /*
@@ -28,7 +32,18 @@ public class Partida {
     5 = TORRE
     6 = PEON   
     */ 
-    
+     public static Partida getInstancia()
+    {
+         if (instancia == null) {
+             instancia = new Partida();
+             instancia.empezar("player1", "player2");
+            System.out.println("El objeto ha sido creado");
+        }
+        else {
+            System.out.println("Ya existe el objeto");
+        }
+         return instancia;
+    }
     public void empezar(String player1, String player2){
         // pide los nombres de los jugadores
         definirJugadores(player1,player2);
@@ -235,27 +250,10 @@ public class Partida {
     }
     
     
-    public void verMovimientos(int jugador, Point c){
-        System.out.println("se llego");
-        ArrayList<Point> aux = jugadores[jugador].verMov(c, this.tablero);
-        if(aux!=null){
-            for (int i = 0; i < aux.size(); i++) {
-            System.out.println("Posible movimiento número "+i+ " : "+aux.get(i).x+" "+aux.get(i).y);
-            }
-        }else{
-            System.out.println("no tiene ningun movimiento disponible");
-        }
-            
+    public ArrayList<Point> verMovimientos(int jugador, Point c){
+        ArrayList<Point>  aux = jugadores[jugador].verMov(c, this.tablero);
+        return aux;
         
-        // recojo el movimiento que se quiere hacer
-        Scanner teclado = new Scanner(System.in);   
-        int aux2;
-        System.out.println("Elija el movimiento que desea realizar, sino quiere realilzar el movimiento ingrese -1");      
-        aux2 = Integer.parseInt(teclado. nextLine());
-        if(aux2!=-1){
-            int nom = jugadores[jugador].preguntarNombre(c);
-            realizarMovimiento(jugador, c, aux.get(aux2),nom, this.tablero);          
-        }      
     }
     
     // verifica si alguna ficha está haciendo jaque al rey
@@ -358,4 +356,9 @@ public class Partida {
         return verificarFuturo(jugador, jugadores[jugador].getPosiRey(), t).isEmpty(); // el rey todavía puede hacer alguna jugada
         // jaque mates        
     }
+
+    public Jugador[] getJugadores() {
+        return jugadores;
+    }
+    
 }

@@ -6,14 +6,19 @@
 
 package server;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logica.Ficha;
+import logica.Jugador;
 import logica.Partida;
+import logica.Tablero;
 
 /**
  *
@@ -56,7 +61,103 @@ public class ServletAjedrez extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("application/:json;charset=UTF-8");
+       
+         String res = request.getParameter("res");
+         Partida mipartida =Partida.getInstancia();
+                int x ;
+                int y;
+                int jugador;
+                   jugador = Integer.parseInt(request.getParameter("jugador"));
+                    x = Integer.parseInt(request.getParameter("x"));
+                    y = Integer.parseInt(request.getParameter("y"));
+                if(res.equals("posMov")) {
+                 
+                    Point c= new Point(x, y);
+                    
+                   
+                    ArrayList<Point> movimientos=mipartida.verMovimientos(jugador,c); //usar el  patron singleton
+                     //System.out.println("jbhds--------------------------*********"+movimientos.get(0).x);
+                    
+                   try (PrintWriter out = response.getWriter()) {
+                 
+                        out.println("{");
+                        for(int i=0;i<movimientos.size();i++){
+                            out.println("\""+i+"\":{");    
+                            out.println("\"x\":"+movimientos.get(i).x+",");
+                            out.println("\"y\":"+movimientos.get(i).y+"");
+                            if(i!=(movimientos.size()-1)){
+                                out.println("},");
+                            }else{
+                                out.println("}");
+                            }
+                            
+                            
+                        }
+                        out.println("}");
+                        System.out.print("llego hasta  aqui");}
+                }else{
+                    int xf = Integer.parseInt(request.getParameter("xf"));
+                    int yf = Integer.parseInt(request.getParameter("yf"));
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    Point pinicial = new Point(x,y);
+                    Tablero t= mipartida.getTablero();
+                    mipartida.realizarMovimiento( jugador, pinicial, new Point(xf,yf),id,t); 
+                    Jugador jugadores[] = mipartida.getJugadores();
+                    ArrayList<Ficha> blanco = jugadores[0].getFichas();
+                    ArrayList<Ficha> negro = jugadores[0].getFichas();
+                    try (PrintWriter out = response.getWriter()) {
+                 
+                        /*out.println("{");
+                        out.println("\""+0+"\":{"); 
+                        for(int i=0;i<16;i++){
+                           
+                             out.println("\""+i+"\":{");    
+                             out.println("\"x\":"+blanco.get(i).getPosicion().x+",");
+                             out.println("\"y\":"+blanco.get(i).getPosicion().y+"");
+                           out.println("},");
+                            
+                        }
+                        
+                        
+                         out.println("\""+1+"\":{"); 
+                        for(int i=0;i<16;i++){
+                           
+                             out.println("\""+i+"\":{");    
+                             out.println("\"x\":"+negro.get(i).getPosicion().x+",");
+                             out.println("\"y\":"+negro.get(i).getPosicion().y+"");
+                             
+                             if(i!=15){
+                                out.println("},");
+                            }else{
+                                out.println("}");
+                            }
+                        }
+                        out.println("}");*/
+                        
+                        System.out.print("llego hasta  aqui");}
+                    processRequest(request, response);
+                } 
+                
+               /*try (PrintWriter out = response.getWriter()) {
+                 
+                        out.println("{");
+                        for(int i=0;i<=1;i++){
+                            out.println("\""+i+"\":{");    
+                            out.println("\"x\":"+1+",");
+                            out.println("\"y\":"+0+"");
+                            if(i!=1){
+                                out.println("},");
+                            }else{
+                                out.println("}");
+                            }
+                            
+                            
+                        }
+                        out.println("}");
+                        System.out.print("llego hasta  aqui");
+            }*/
+                
     }
 
     /**
@@ -74,8 +175,8 @@ public class ServletAjedrez extends HttpServlet {
          String player2 = request.getParameter("player2");
          
         
-         Partida mipartida = new Partida(); 
-        mipartida.empezar(player1, player2);
+         Partida mipartida =Partida.getInstancia();
+        
         processRequest(request, response);
     }
 
