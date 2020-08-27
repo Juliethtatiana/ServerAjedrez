@@ -64,7 +64,6 @@ public class ServletAjedrez extends HttpServlet {
         response.setContentType("application/:json;charset=UTF-8");
        
          String res = request.getParameter("res");
-         System.err.print(res);
          Partida mipartida =Partida.getInstancia();
                 int x ;
                 int y;
