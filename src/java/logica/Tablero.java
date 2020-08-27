@@ -2,6 +2,7 @@ package logica;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class Tablero {
     
@@ -414,6 +415,11 @@ public boolean diferenciaFichas(Point pInicial, Point pFinal, String color){
     
     // MANEJA LO DE HACER UN MOVIMIENTO
     public void movimiento(Point inicio,Point llegada, String color, int nomFicha){
+        
+        /*if(this.tablero[inicio.x][inicio.y]==0){
+            JOptionPane.showMessageDialog(null, "no hay nada en esa posición");
+        }*/
+        
         this.tablero[inicio.x][inicio.y]=0;
         this.tablero[llegada.x][llegada.y]=nomFicha;
         if (color=="blanco"){

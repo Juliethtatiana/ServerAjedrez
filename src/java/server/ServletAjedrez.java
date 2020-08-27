@@ -64,23 +64,24 @@ public class ServletAjedrez extends HttpServlet {
         response.setContentType("application/:json;charset=UTF-8");
        
          String res = request.getParameter("res");
+         System.err.print(res);
          Partida mipartida =Partida.getInstancia();
                 int x ;
                 int y;
                 int jugador;
-                   jugador = Integer.parseInt(request.getParameter("jugador"));
+                    if(res.equals("posMov")) {
+                  jugador = Integer.parseInt(request.getParameter("jugador"));
                     x = Integer.parseInt(request.getParameter("x"));
                     y = Integer.parseInt(request.getParameter("y"));
-                if(res.equals("posMov")) {
-                 
+              
                     Point c= new Point(x, y);
                     
                    
                     ArrayList<Point> movimientos=mipartida.verMovimientos(jugador,c); //usar el  patron singleton
-                     //System.out.println("jbhds--------------------------*********"+movimientos.get(0).x);
+                //     System.out.println("jbhds--------------------------*********"+movimientos.get(0).x);
                     
                    try (PrintWriter out = response.getWriter()) {
-                 
+                       if(!movimientos.isEmpty()){
                         out.println("{");
                         for(int i=0;i<movimientos.size();i++){
                             out.println("\""+i+"\":{");    
@@ -95,37 +96,66 @@ public class ServletAjedrez extends HttpServlet {
                             
                         }
                         out.println("}");
-                        System.out.print("llego hasta  aqui");}
-                }else{
+                   
+                       }
+                       }
+                        //System.out.print("llego hasta  aqui");}
+                }else  if(res.equals("Mov")){
+                    System.out.print("Mov");
+                   jugador = Integer.parseInt(request.getParameter("jugador"));
+                    x = Integer.parseInt(request.getParameter("x"));
+                    y = Integer.parseInt(request.getParameter("y"));
+              
                     int xf = Integer.parseInt(request.getParameter("xf"));
                     int yf = Integer.parseInt(request.getParameter("yf"));
                     int id = Integer.parseInt(request.getParameter("id"));
                     Point pinicial = new Point(x,y);
                     Tablero t= mipartida.getTablero();
-                    mipartida.realizarMovimiento( jugador, pinicial, new Point(xf,yf),id,t); 
+                    mipartida.realizarMovimiento(jugador,pinicial, new Point(xf,yf),id,t); 
                     Jugador jugadores[] = mipartida.getJugadores();
                     ArrayList<Ficha> blanco = jugadores[0].getFichas();
-                    ArrayList<Ficha> negro = jugadores[0].getFichas();
+                    ArrayList<Ficha> negro = jugadores[1].getFichas();
+                    
+                    try (PrintWriter out = response.getWriter()) {
+                        out.println("{");
+                            out.println("\"x\":"+xf+",");
+                            out.println("\"y\":"+yf+",");
+                            out.println("\"jugador\":"+jugador+",");
+                            out.println("\"ficha\":"+t.getTablero()[xf][yf]);
+                        out.println("}");
+                       System.out.print("llego hasta  aqui");
+                    }
+                    System.out.print("Mov");
+                  }else  if(res.equals("Consficha")){
+                    Jugador jugadores[] = mipartida.getJugadores();
+                    ArrayList<Ficha> blanco = jugadores[0].getFichas();
+                    ArrayList<Ficha> negro = jugadores[1].getFichas();
                     try (PrintWriter out = response.getWriter()) {
                  
-                        /*out.println("{");
+                        out.println("{");
                         out.println("\""+0+"\":{"); 
                         for(int i=0;i<16;i++){
                            
                              out.println("\""+i+"\":{");    
                              out.println("\"x\":"+blanco.get(i).getPosicion().x+",");
-                             out.println("\"y\":"+blanco.get(i).getPosicion().y+"");
-                           out.println("},");
-                            
+                             out.println("\"y\":"+blanco.get(i).getPosicion().y+",");
+                             out.println("\"id\":"+blanco.get(i).getNombre());
+                            if(i!=15){
+                                out.println("},");
+                            }else{
+                                out.println("}");
+                            }
+                          
                         }
-                        
+                         out.println("},"); 
                         
                          out.println("\""+1+"\":{"); 
                         for(int i=0;i<16;i++){
                            
                              out.println("\""+i+"\":{");    
                              out.println("\"x\":"+negro.get(i).getPosicion().x+",");
-                             out.println("\"y\":"+negro.get(i).getPosicion().y+"");
+                             out.println("\"y\":"+negro.get(i).getPosicion().y+",");
+                             out.println("\"id\":"+negro.get(i).getNombre());
                              
                              if(i!=15){
                                 out.println("},");
@@ -133,11 +163,11 @@ public class ServletAjedrez extends HttpServlet {
                                 out.println("}");
                             }
                         }
-                        out.println("}");*/
-                        
-                        System.out.print("llego hasta  aqui");}
-                    processRequest(request, response);
-                } 
+                        out.println("}");
+                        out.println("}");
+                        }
+                   
+            } 
                 
                /*try (PrintWriter out = response.getWriter()) {
                  

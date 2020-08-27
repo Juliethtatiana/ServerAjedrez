@@ -44,6 +44,7 @@ public class Partida {
         }
          return instancia;
     }
+     
     public void empezar(String player1, String player2){
         // pide los nombres de los jugadores
         definirJugadores(player1,player2);
@@ -242,16 +243,32 @@ public class Partida {
     }
     
     // realiza el movimiento de la ficha en el tablero y en la ficha 
-    public void realizarMovimiento(int jugador, Point pinicial, Point pfinal, int nombre, Tablero t){
+   
+    public void realizarMovimiento(int jugador,Point pinicial, Point pfinal, int id, Tablero t){
         // se hace el movimiento en el tablero
-        t.movimiento(pinicial, pfinal, this.jugadores[jugador].getColor(), nombre);
+       
+        if(numbJugadas%2==0){
+            jugador = 1;
+        }else{
+            jugador = 0;
+        }
+        
+        this.tablero.movimiento(pinicial, pfinal, this.jugadores[jugador].getColor(), this.jugadores[jugador].preguntarNombre(pinicial));
         // se hace el movimiento en la posición de la ficha
         this.jugadores[jugador].realizarMov(pinicial, pfinal);
+        this.numbJugadas++;
     }
     
     
     public ArrayList<Point> verMovimientos(int jugador, Point c){
         ArrayList<Point>  aux = jugadores[jugador].verMov(c, this.tablero);
+        /*int i;
+        for ( i=0;i<aux.size ();i++) {
+            JOptionPane.showMessageDialog(null, "posible posición número"+i);
+            JOptionPane.showMessageDialog(null, aux.get(i).x);
+            JOptionPane.showMessageDialog(null, aux.get(i).y);
+        }*/
+        
         return aux;
         
     }
